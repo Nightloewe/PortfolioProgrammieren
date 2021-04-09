@@ -10,7 +10,9 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class PersonService {
@@ -130,6 +132,21 @@ public class PersonService {
         }
 
         return persons;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> void sort(List<T> collection, Comparator<T> comparator) {
+        Object[] result = this.mergeSort(collection.toArray(), (Comparator<Object>) comparator);
+
+        //Hier musst du die originale Collection quasi updaten
+    }
+
+    public Object[] mergeSort(Object[] list, Comparator<Object> comparator) {
+        return null;
+    }
+
+    public Object[] merge(Object[] leftList, Object[] rightList, Comparator<Object> comparator) {
+        return null;
     }
 
 }

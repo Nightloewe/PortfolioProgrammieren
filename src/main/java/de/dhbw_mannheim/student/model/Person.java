@@ -1,9 +1,6 @@
 package de.dhbw_mannheim.student.model;
 
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
 
 public class Person {
 
