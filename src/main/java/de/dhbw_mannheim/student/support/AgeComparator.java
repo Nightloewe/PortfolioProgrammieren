@@ -38,22 +38,26 @@ public class AgeComparator extends OrderedComparator<Person> {
 
     @Override
     public int compare(Person thisPerson, Person other) {
-        long thisAge = thisPerson.getAge(this.date);
-        long otherAge = other.getAge(this.date);
+        LocalDate thisBirthDate = thisPerson.getBirthDate();
+        LocalDate otherBirthDate = other.getBirthDate();
 
         if(this.direction == SortDirection.ASCENDING) {
-            return this.compareAge(thisAge, otherAge);
+            // Aufsteigend ist Standardreihenfolge
+            return this.compareAge(thisBirthDate, otherBirthDate);
         } else {
-            return this.compareAge(otherAge, thisAge);
+            // Für absteigend wird einfach die Reihenfolge umgekehrt, d.h.
+            // aus 1 wird z.B. -1
+            // aus -1 wird 1
+            // und 0 bleibt 0
+            return this.compareAge(otherBirthDate, thisBirthDate);
         }
     }
 
-    private int compareAge(long thisAge, long otherAge) {
-        if(thisAge > otherAge) {
-            return 1;
-        } else if(thisAge < otherAge) {
-            return -1;
-        }
-        return 0;
+    private int compareAge(LocalDate thisAge, LocalDate otherAge) {
+        //Umgekehrte Reihenfolge, da Datum die Daten so strukturiert, dass das
+        //jüngste Datum die höchste Zahl bekommt, und das älteste die niedrigste
+        //In aufsteigender Reihenfolge, wollen wir aber das Alter und daher
+        //soll das älteste Datum am höchsten sein.
+        return otherAge.compareTo(thisAge);
     }
 }

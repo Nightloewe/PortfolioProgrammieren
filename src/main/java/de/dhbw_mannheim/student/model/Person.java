@@ -1,6 +1,12 @@
 package de.dhbw_mannheim.student.model;
 
+import de.dhbw_mannheim.student.support.PersonService;
+
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 
 public class Person {
 
@@ -77,7 +83,7 @@ public class Person {
         if(this.birthDate == null) {
             return 0L;
         } else {
-            return date.minusYears(this.birthDate.getYear()).getYear();
+            return Period.between(this.birthDate, date).getYears();
         }
     }
 
@@ -104,11 +110,7 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
-                "surname='" + surname + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", birthDate=" + birthDate +
-                ", city='" + city + '\'' +
-                '}';
+        return this.lastName + ", " + this.surname + ", " + PersonService.formatter.format(this.birthDate)
+                + ", " + city + ", " + this.getAge(LocalDate.now());
     }
 }

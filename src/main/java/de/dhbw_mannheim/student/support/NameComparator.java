@@ -2,7 +2,6 @@ package de.dhbw_mannheim.student.support;
 
 import de.dhbw_mannheim.student.model.Person;
 
-import java.util.Comparator;
 
 public class NameComparator extends OrderedComparator<Person> {
 
