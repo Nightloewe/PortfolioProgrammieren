@@ -1,12 +1,7 @@
 // Helper method to print out the integer array.
-private static void printArray(int[] array) {
 
-        for(int i: array) {
-        System.out.print(i + " ");
-        }
-        System.out.println();
-
-        }module de.dhbw_mannheim.student {
+    module de.dhbw_mannheim.student {
     requires javafx.controls;
+    requires java.desktop;
     exports de.dhbw_mannheim.student;
 }

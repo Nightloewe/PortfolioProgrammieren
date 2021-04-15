@@ -12,9 +12,7 @@ public class Person {
 
     private String surname;
     private String lastName;
-
     private LocalDate birthDate;
-
     private String city;
 
     /**

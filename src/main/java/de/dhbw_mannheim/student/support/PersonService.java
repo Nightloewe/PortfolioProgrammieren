@@ -265,7 +265,7 @@ public class PersonService {
             if (leftPointer < leftList.length && rightPointer < rightList.length) {
 
                 // Prüft ob das linke item kleiner als das rechte ist
-                if (leftList[leftPointer] < rightList[rightPointer]) {                                                            //Objekte miteinander Vergleichen welches kleiner ist?
+                if (comparator.compare(leftList, rightList) < 1) {                                                            //Objekte miteinander Vergleichen welches kleiner ist?
 
                     result[resultPointer++] = leftList[leftPointer++];
 
