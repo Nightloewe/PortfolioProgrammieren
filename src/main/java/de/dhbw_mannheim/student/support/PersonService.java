@@ -3,66 +3,22 @@ package de.dhbw_mannheim.student.support;
 import de.dhbw_mannheim.student.exceptions.FileIsDirectoryException;
 import de.dhbw_mannheim.student.model.Person;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
 public class PersonService {
 
     public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-
-    private static NameComparator nameComparator = new NameComparator();
-    private static AgeComparator ageComparator = new AgeComparator();
-
-    public static void main(String[] args) {
-        Path path = Path.of("C:\\").resolve("Users").resolve("Jonas").resolve("Desktop").resolve("persons.csv");
-
-        PersonService service = new PersonService();
-
-        try {
-            List<Person> persons = service.loadPersons(path);
-
-            System.out.println("Unsorted: ");
-            print(persons);
-
-            Collections.sort(persons, nameComparator);
-
-            System.out.println("Sorted by Last Name ASC: ");
-            print(persons);
-
-            nameComparator.setDirection(SortDirection.DESCENDING);
-            Collections.sort(persons, nameComparator);
-
-            System.out.println("Sorted by Last Name DESC: ");
-            print(persons);
-
-            Collections.sort(persons, ageComparator);
-
-            System.out.println("Sorted by Age ASC: ");
-            print(persons);
-
-            ageComparator.setDirection(SortDirection.DESCENDING);
-
-            Collections.sort(persons, ageComparator);
-
-            System.out.println("Sorted by Age DESC: ");
-            print(persons);
-        } catch (IOException e) {
-            System.err.println("Exception occured: " + e.getMessage());
-        }
-    }
-
-    public static void print(List<Person> persons) {
-        persons.forEach(System.out::println);
-    }
 
     /**
      * Ladet eine Liste von Personen aus einer
@@ -134,6 +90,13 @@ public class PersonService {
         return persons;
     }
 
+
+    /**
+     * Sortiert eine Liste nach MergeSort.
+     *
+     * @param collection die unsortierte Liste
+     * @param comparator der Vergleicher
+     */
     @SuppressWarnings("unchecked")
     public <T> void sort(List<T> collection, Comparator<T> comparator) {
         Object[] result = this.mergeSort(collection.toArray(), (Comparator<Object>) comparator);
@@ -142,6 +105,89 @@ public class PersonService {
         //collection.set(selbe Index, selbes Element wie Index)                                                          //collection.set(selbe Index, selbes Element wie Index)
     }
 
+    /**
+     * Sortiert eine Liste mit Hilfe des MergeSort Algorithmus.
+     *
+     * Bei MergeSort werden solange die Listen halbiert, bis man an einen Punkt
+     *      kommt, bei der eine linke und rechte Liste mit nur jeweils einem Element entstehen.
+     *      Danach werden diese linken und rechten Listen zusammengefügt und dabei sortiert.
+     *      Bei der Zusammenfügung wird immer das erste Element verglichen und das kleinere
+     *      der beiden angefügt. Dabei wird das angefügte Element aus der jeweiligen
+     *      Listen "entfernt" (In unserem Fall wird der Index für diese Liste um eins erhöht).
+     *      Bei der Zusammenfügung kann es zu dem Fall kommen, dass mindestens ein Element
+     *      vorkommt, welches in der ersten while-Schleife nicht verarbeitet wird. Dieses
+     *      wird dann in einer der nächsten while-Schleifen noch angefügt.
+     *
+     *      <B>Ein Beispiel:</B>
+     *      <code>
+     *      Man habe das unsortierte Array [5, 3, 23, 2, 1]
+     *
+     *      Das Array wird halbiert in linkes Array L[] und rechtes Array R[]
+     *      L[] = [5, 3]
+     *      R[] = [23, 2, 1]
+     *
+     *      In der nächsten Rekursionsebene wird nun geteilt
+     *      --- A1[] = [5, 3]
+     *      --- L1[] = [5]
+     *      --- R1[] = [3]
+     *      ---
+     *      --- Da nun L1 und R1 nur ein Element enthalten wird nicht weiter halbiert
+     *      --- L1 und R1 werden nun gemerged:
+     *      ---
+     *      --- M1[] = [null, null]
+     *      --- Da L größer ist als R1, wird zuerst R1 eingefügt
+     *      --- M1[] = [3,null]
+     *      --- Danach wird durch die zweite While noch L1 angefügt
+     *      --- M1[] = [3, 5]
+     *
+     *      L ist nun bereits fertig sortiert
+     *      L[] = [3,5]
+     *
+     *      Nun wird R behandelt und rekursiv geteilt:
+     *      --- A2[] = [23, 2, 1]
+     *      --- L2[] = [23]
+     *      --- R2[] = [2,1]
+     *      ---
+     *      --- In diesem wird L2 nicht weiter halbiert, R2 aber schon
+     *      ------ A2.1[] = [2,1]
+     *      ------ L2.1[] = [2]
+     *      ------ R2.1[] = [1]
+     *      ------
+     *      ------ Nun wird aber nicht mehr geteilt, daher wird jetzt gemerged:
+     *      ------ M2.1[] = [null, null]
+     *      ------ Da L größer als 1 ist, wird 1 zuerst eingefügt
+     *      ------ M2.1[] = [1, null]
+     *      ------ Danach wird R eingefügt
+     *      ------ M2.1[] = [1,2]
+     *      --- R2 ist nun fertig sortiert
+     *      --- R2[] = [1,2]
+     *      ---
+     *      --- Jetz wird L2 und R2 gemerged:
+     *      --- M2[] = [null, null, null]
+     *      --- Da L2[0] größer ist als R2[0], wird nun zuerst R2[0] eingefügt:
+     *      --- M2[] = [1, null, null]
+     *      --- Da L2[0] wieder größer ist als R2[1], wird nun R2[1] eingefügt:
+     *      --- M2[] = [1, 2, null]
+     *      --- Zum Schluss wird dann L2 noch angefügt
+     *      --- M2[] = [1, 2, 23]
+     *
+     *      L[] = [3, 5]
+     *      R[] = [1, 2, 23]
+     *
+     *      Nun sind R und L sortiert und kann für das "Mergen" der kompletten
+     *      Liste genutzt werden:
+     *      M[] = [null, null, null, null, null]
+     *
+     *      Nun wird zuerst die 1 aus R eingefügt, danach die 2 aus R, danach die 3
+     *      aus L, danach die 5 aus L und zum Schluss wird noch die 23 aus R angefügt.
+     *      M[] = [1, 2, 3, 5, 23]
+     *
+     *      M ist nun die sortierte Liste.
+     *      </code>
+     *
+     * @param list die Liste
+     * @param comparator der Vergleicher
+     */
     public Object[] mergeSort(Object[] list, Comparator<Object> comparator) {
         if(list.length <= 1) {
 
@@ -191,8 +237,17 @@ public class PersonService {
         return result;
 
     }
-
-    // Merges the leftList and rightList array in ascending order.
+  
+    /**
+     * Füge die rechte und die linke Liste zusammen für
+     * MergeSort zusammen und sortiert dabei die Elemente
+     * nach ihrer durch den Vergleicher vorgegebenen Größe.
+     *
+     * @param leftList die linke Liste
+     * @param rightList die rechte Liste
+     * @param comparator der Vergleicher
+     * @return die verbundene und sortierte Liste
+     */
     private static Object[] merge(Object[] leftList, Object[] rightList, Comparator<Object> comparator) {
 
 
