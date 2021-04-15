@@ -102,7 +102,7 @@ public class PersonService {
         Object[] result = this.mergeSort(collection.toArray(), (Comparator<Object>) comparator);
 
         //Hier musst du die originale Collection quasi updaten
-        //collection.set(selbe Index, selbes Element wie Index)
+        //collection.set(selbe Index, selbes Element wie Index)                                                          //collection.set(selbe Index, selbes Element wie Index)
     }
 
     /**
@@ -189,9 +189,55 @@ public class PersonService {
      * @param comparator der Vergleicher
      */
     public Object[] mergeSort(Object[] list, Comparator<Object> comparator) {
-        return null;
-    }
+        if(list.length <= 1) {
 
+            return list;
+
+        }
+
+        int midpoint = list.length / 2;
+
+        // Declaration left und right Objekt
+        Object[] left = new Object[midpoint];
+        Object[] right;
+
+        if(list.length % 2 == 0) {
+
+            right = new Object[midpoint];
+
+        } else {
+
+            right = new Object[midpoint + 1];
+
+        }
+
+        // Füllen des linken und rechten Objekt
+        for(int i=0; i < midpoint; i++) {
+
+            left[i] = list[i];
+
+        }
+
+        for(int j=0; j < right.length; j++) {
+
+            right[j] = list[midpoint+j];
+
+        }
+
+        Object [] result = new Object[list.length];
+
+        // Recursiver Aufruf mit left und right
+        left = mergeSort(left, comparator);
+        right = mergeSort(right, comparator);
+
+        // Get the merged left and right arrays.
+        result = merge(left, right, comparator);
+
+        // return der zusammengerührten liste
+        return result;
+
+    }
+  
     /**
      * Füge die rechte und die linke Liste zusammen für
      * MergeSort zusammen und sortiert dabei die Elemente
@@ -202,7 +248,44 @@ public class PersonService {
      * @param comparator der Vergleicher
      * @return die verbundene und sortierte Liste
      */
-    public Object[] merge(Object[] leftList, Object[] rightList, Comparator<Object> comparator) {
-        return null;
+    private static Object[] merge(Object[] leftList, Object[] rightList, Comparator<Object> comparator) {
+
+
+        // Zusammengeführtes Ergebnisarray
+        Object[] result = new Object[leftList.length + rightList.length];
+
+        // Deklariert und Initialisiert pointers für alle Arrays
+        int leftPointer, rightPointer, resultPointer;
+        leftPointer = rightPointer = resultPointer = 0;
+
+        // gibt es ellemente in beiden
+        while (leftPointer < leftList.length || rightPointer < rightList.length) {
+
+            // Ist ein Item in beiden? Wenn beide ein Element haben wird geprüft welches größer ist
+            if (leftPointer < leftList.length && rightPointer < rightList.length) {
+
+                // Prüft ob das linke item kleiner als das rechte ist
+                if (leftList[leftPointer] < rightList[rightPointer]) {                                                            //Objekte miteinander Vergleichen welches kleiner ist?
+
+                    result[resultPointer++] = leftList[leftPointer++];
+
+                }
+                // Wenn das rechte Item größer als das linke ist werden dies in result getauscht
+                else {
+
+                    result[resultPointer++] = rightList[rightPointer++];
+
+                }
+
+            }
+        }
+        return result;
     }
+
+            //  public Object[] merge(Object[] leftList, Object[] rightList, Comparator<Object> comparator) {
+            //      return null;
+            //  }
+
+
+
 }
