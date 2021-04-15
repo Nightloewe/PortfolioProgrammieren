@@ -1,21 +1,11 @@
 package de.dhbw_mannheim.student;
 
-import java.util.List;
 import de.dhbw_mannheim.student.model.Person;
-import de.dhbw_mannheim.student.support.PersonService;
 import javafx.application.Application;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Orientation;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import java.nio.file.Path;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Menu;
@@ -30,28 +20,11 @@ import javafx.collections.FXCollections;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.CheckMenuItem;
-
-import javafx.scene.control.ListView;
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import javafx.scene.control.SeparatorMenuItem;
-
-
-import javafx.scene.layout.HBox;
 
 
 
 public class App extends Application {
 
-    private Panel panel;
-    private Frame frame;
     private MenuBar menuBar;
     private Menu menu;
     private Menu menuItemOpenFile;  //kann methode mit set und
@@ -91,11 +64,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-
-
         stage.setTitle("Aufgabe 6");
 
-        frame = new Frame();
         menuBar = new MenuBar();
 
         subMenu1 = new Menu("Sortierung nach Nachnam");
@@ -126,10 +96,6 @@ public class App extends Application {
         RadioMenuItem2.setToggleGroup(difficultyToggle);
         RadioMenuItem3.setToggleGroup(difficultyToggle);
         RadioMenuItem4.setToggleGroup(difficultyToggle);
-
-
-
-
 
         ObservableList <String> list = FXCollections.observableArrayList("asdsa");
 
@@ -212,8 +178,5 @@ public class App extends Application {
 
     public static void main(String [] Args){
         launch();
-
-
-
     }
 }
