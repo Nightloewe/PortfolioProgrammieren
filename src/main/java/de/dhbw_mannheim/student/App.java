@@ -5,12 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.List;
 import de.dhbw_mannheim.student.model.Person;
 import de.dhbw_mannheim.student.support.*;
@@ -54,7 +49,6 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Properties;
 import javafx.scene.control.SeparatorMenuItem;
 
@@ -107,9 +101,9 @@ public class App extends Application {
     private  Person [] listePersonen;
     private List<Person> persons = new ArrayList<>();
     private TableView<Person> table;
-    private List<Person> listView;
+    private List<Person> listPersonPath;
     private Scene scene;
-    private Path pathhh;
+    private Path path1;
     private OrderedComparator <Person> aktuellerOperato;
 
 
@@ -128,7 +122,8 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         table = new TableView<Person>();
-        String[] speicherarry = new String[255];
+       //nicht nötig String[] speicherarry = new String[255];
+
 
         stage.setTitle("Aufgabe 6");
 
@@ -166,8 +161,8 @@ public class App extends Application {
 
         ObservableList<String> list = FXCollections.observableArrayList("asdsa");
         list.add("loadPerson");
-        ListView<String> listView = new ListView<String>();
-        listView.setItems(list);
+        ListView<Person> listView = new ListView<Person>();
+      //nicht nötig  listView.setItems(list);
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         //Datei auswählen
 
@@ -175,6 +170,7 @@ public class App extends Application {
             @Override
             public void handle(ActionEvent event) {
                 listView.getItems().clear();
+                //speicherarray muss geleert werden
             }
         });
 
@@ -183,33 +179,44 @@ public class App extends Application {
             public void handle(ActionEvent actionEvent) {
                 int StringsInArray=0;
                 FileChooser chooser = new FileChooser();
+
+
                 File file = chooser.showOpenDialog(scene.getWindow());
-                String datensatz = null;
-                try {
-                    Scanner scanner = new Scanner(file);
-                    while (scanner.hasNextLine()) {
-                        datensatz = scanner.nextLine();
 
-                        speicherarry[StringsInArray]= datensatz;
-                        listView.getItems().add(datensatz);
-                        StringsInArray++;
 
-                    }
-                    scanner.close();
-                    //speicherarry= new String[StringsInArray];
+                Path path = file.toPath();
+                path1 =path;
 
-                } catch (FileNotFoundException e) {
-                    System.out.println("Datei konnte nicht gefunden werden");
-                    e.printStackTrace();
+             //nicht nötig   String datensatz = null;
+             //nicht nötig   try {
+             //nicht nötig       Scanner scanner = new Scanner(file);
+             //nicht nötig       while (scanner.hasNextLine()) {
+             //nicht nötig           datensatz = scanner.nextLine();
+//nicht nötig
+             //nicht nötig           speicherarry[StringsInArray]= datensatz;
+             //nicht nötig           listView.getItems().add(datensatz);
+             //nicht nötig           StringsInArray++;
+//nicht nötig
+             //nicht nötig       }
+             //nicht nötig       scanner.close();
+             //nicht nötig       //speicherarry= new String[StringsInArray];
+//nicht nötig
+             //nicht nötig   } catch (FileNotFoundException e) {
+             //nicht nötig       System.out.println("Datei konnte nicht gefunden werden");
+             //nicht nötig       e.printStackTrace();
+//nicht nötig
+             //nicht nötig   }
 
-                }
             }
         });
 
        // menuItemOpenFile.setOnAction(this::onOpenFileClick);
-
-   //     PersonService service = new PersonService();
-   //     }
+        PersonService service = new PersonService();
+     //   service.loadPersons(path1);
+        List<Person> persons = service.loadPersons(path1);
+        for(Person person : persons) {
+            listView.getItems().add(person);
+        }
 
 
      //   subMenu1.setOnAction(new EventHandler<ActionEvent>() {
@@ -246,11 +253,8 @@ public class App extends Application {
 
 
 
-        //   PersonService service = new PersonService();
-        //   List<Person> persons = service.loadPersons(Paths.get("C:\test.txt"));
-        //   for(Person person : persons) {
-        //       System.out.println(person);
-        //       listView.getItems().add(person);
+
+
 
         //   }
 
@@ -347,7 +351,7 @@ public class App extends Application {
 
     }
 
-    public void onOpenFileClick(ActionEvent e) {
+    //public void onOpenFileClick(ActionEvent e) {
         //Die ListView hier dann bearbeiten
 
 
@@ -362,7 +366,7 @@ public class App extends Application {
      //   this.ageComparator.setDirection(nextDirection);
 
 
-    }
+
 
     void openFile(ActionEvent event){
         FileChooser chooser = new FileChooser();
