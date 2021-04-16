@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.List;
 import de.dhbw_mannheim.student.model.Person;
-import de.dhbw_mannheim.student.support.PersonService;
+import de.dhbw_mannheim.student.support.*;
 import javafx.application.Application;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -55,11 +55,13 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Properties;
 import javafx.scene.control.SeparatorMenuItem;
 
 
 import javafx.scene.layout.HBox;
 
+import javax.print.attribute.standard.MediaSize;
 import javax.swing.*;
 
 
@@ -101,15 +103,32 @@ public class App extends Application {
     private TextField textfield;
     private Text t;
     private ObservableList<Person> list;
-    //this. list ist die arraylist wleche über dei methode geladen hat
+    //this.list ist die arraylist wleche über dei methode geladen hat
+    private  Person [] listePersonen;
+    private List<Person> persons = new ArrayList<>();
     private TableView<Person> table;
-    private ListView<Person> listView;
+    private List<Person> listView;
     private Scene scene;
+    private Path pathhh;
+    private OrderedComparator <Person> aktuellerOperato;
+
+
+    public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private static NameComparator nameComparator = new NameComparator();
+    private static AgeComparator ageComparator = new AgeComparator();
+
+    private static Comparator aktivComparator = new Comparator() {
+        @Override
+        public int compare(Object o1, Object o2) {
+            return 0;
+        }
+    };
 
 
     @Override
     public void start(Stage stage) throws Exception {
-
+        table = new TableView<Person>();
+        String[] speicherarry = new String[255];
 
         stage.setTitle("Aufgabe 6");
 
@@ -130,63 +149,101 @@ public class App extends Application {
 
         menu = new Menu("Sortierung ");
         subMenu1 = new MenuItem("Nach Nachnamen sortieren ");
+        MenuItem aufsteigendVorname = new MenuItem("Aufsteigend");
         subMenu2 = new MenuItem("Nach Vorname sortiern ");
         richttung = new MenuItem("Sortierrichtung ");
         menu.getItems().add(subMenu1);
         menu.getItems().add(subMenu2);
         menu.getItems().add(richttung);
 
+
+
         //erstellen
         menuBar.getMenus().add(datei);
         menuBar.getMenus().add(menu);
 
+
+
+        ObservableList<String> list = FXCollections.observableArrayList("asdsa");
+        list.add("loadPerson");
+        ListView<String> listView = new ListView<String>();
+        listView.setItems(list);
+        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         //Datei auswählen
+
+        dateiSchließen.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                listView.getItems().clear();
+            }
+        });
+
         dateiOeffnen.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                int StringsInArray=0;
                 FileChooser chooser = new FileChooser();
-
                 File file = chooser.showOpenDialog(scene.getWindow());
-                Path path = file.toPath();
+                String datensatz = null;
+                try {
+                    Scanner scanner = new Scanner(file);
+                    while (scanner.hasNextLine()) {
+                        datensatz = scanner.nextLine();
 
+                        speicherarry[StringsInArray]= datensatz;
+                        listView.getItems().add(datensatz);
+                        StringsInArray++;
 
+                    }
+                    scanner.close();
+                    //speicherarry= new String[StringsInArray];
 
+                } catch (FileNotFoundException e) {
+                    System.out.println("Datei konnte nicht gefunden werden");
+                    e.printStackTrace();
 
-
+                }
             }
         });
-     //   PersonService service = new PersonService();
-     //   List<Person> persons = service.loadPersons(Paths.get("C:\test.txt"));
-     //   for (Person person : persons) {
-     //       System.out.println(person);
-     //   }
+
+       // menuItemOpenFile.setOnAction(this::onOpenFileClick);
+
+   //     PersonService service = new PersonService();
+   //     }
 
 
-        //  FileChooser chooser = new FileChooser();
+     //   subMenu1.setOnAction(new EventHandler<ActionEvent>() {
+     //       @Override
+     //       public void handle(ActionEvent event) {
 //
-        //  File file = chooser.showOpenDialog(scene.getWindow());
-        //  Path path = file.toPath();
+     //           NameComparator nameComparator = new NameComparator();
+     //           AgeComparator ageComparator = new AgeComparator();
+     //           SortDirection nextDirektion = null;
 //
+     //           if(this.aktivComparator.getDirection() == SortDirection.ASCENDING) {
+     //               nextDirection = SortDirection.DESCENDING;
+     //           } else {
+     //               nextDirection = SortDirection.ASCENDING;
+     //           }
 //
+     //           this.nameComparator.setDirection(nextDirection);
+     //           this.ageComparator.setDirection(nextDirection);
+     //       }
+     //   });
 
 
-        //seperator noch einfügen
 
 
         ToggleGroup difficultyToggle = new ToggleGroup();
 
-        //    subMenu1.getItems().add(RadioMenuItem1);
-        //    subMenu1.getItems().add(RadioMenuItem2);
-        //    subMenu2.getItems().add(RadioMenuItem3);
-        //    subMenu2.getItems().add(RadioMenuItem4);
-
-        RadioMenuItem1.setToggleGroup(difficultyToggle);
-        RadioMenuItem2.setToggleGroup(difficultyToggle);
-        RadioMenuItem3.setToggleGroup(difficultyToggle);
-        RadioMenuItem4.setToggleGroup(difficultyToggle);
+                    //RadioMenuItem1.setToggleGroup(difficultyToggle);
+                    //RadioMenuItem2.setToggleGroup(difficultyToggle);
+                    //RadioMenuItem3.setToggleGroup(difficultyToggle);
+                    //RadioMenuItem4.setToggleGroup(difficultyToggle);
 
 
-        ObservableList<String> list = FXCollections.observableArrayList("asdsa");
+
+
 
 
         //   PersonService service = new PersonService();
@@ -197,54 +254,55 @@ public class App extends Application {
 
         //   }
 
-        list.add("loadPerson");
-        ListView<String> listView = new ListView<String>();
-        listView.setItems(list);
-        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
 
-        RadioMenuItem1.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                listView.getItems().clear();
-                listView.getItems().add("Personenangaben");
-                listView.getItems().add("asd");
-                listView.getItems().add("asd");
-                listView.getItems().add("asd");
-            }
-        });
-        RadioMenuItem2.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                listView.getItems().clear();
-                listView.getItems().add("Personenangaben");
-                listView.getItems().add("assssssd");
-                listView.getItems().add("assssssd");
-                listView.getItems().add("assssssd");
-            }
-        });
-        RadioMenuItem3.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                listView.getItems().clear();
-                listView.getItems().add("Personenangaben");
-                listView.getItems().add("asdas sad 545d");
-                listView.getItems().add("asdas sad 545d");
-                listView.getItems().add("asdas sad 545d");
-            }
-        });
-        RadioMenuItem4.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                listView.getItems().clear();
-                listView.getItems().add("Personenangaben");
-                //     listView.getItems().add(Personen);
-                listView.getItems().add("a400405000 50    5sd");
-                listView.getItems().add("a400405000 50    5sd");
-            }
-        });
+    //  menuItemOpenFile.setOnAction(this::onOpenFileClick);
+
+                    //   RadioMenuItem1.setOnAction(new EventHandler<ActionEvent>() {
+                    //       @Override
+                    //       public void handle(ActionEvent actionEvent) {
+                    //           listView.getItems().clear();
+                    //           listView.getItems().add("Personenangaben");
+                    //           listView.getItems().add("asd");
+                    //           listView.getItems().add("asd");
+                    //           listView.getItems().add("asd");
+                    //       }
+                    //   });
+                    //   RadioMenuItem2.setOnAction(new EventHandler<ActionEvent>() {
+                    //       @Override
+                    //       public void handle(ActionEvent actionEvent) {
+                    //           listView.getItems().clear();
+                    //           listView.getItems().add("Personenangaben");
+                    //           listView.getItems().add("assssssd");
+                    //           listView.getItems().add("assssssd");
+                    //           listView.getItems().add("assssssd");
+                    //       }
+                    //   });
+                    //   RadioMenuItem3.setOnAction(new EventHandler<ActionEvent>() {
+                    //       @Override
+                    //       public void handle(ActionEvent actionEvent) {
+                    //           listView.getItems().clear();
+                    //           listView.getItems().add("Personenangaben");
+                    //           listView.getItems().add("asdas sad 545d");
+                    //           listView.getItems().add("asdas sad 545d");
+                    //           listView.getItems().add("asdas sad 545d");
+                    //       }
+                    //   });
+                    //   RadioMenuItem4.setOnAction(new EventHandler<ActionEvent>() {
+                    //       @Override
+                    //       public void handle(ActionEvent actionEvent) {
+//
+                    //           listView.getItems().clear();
+                    //           listView.getItems().add("Personenangaben");
+                    //           //     listView.getItems().add(Personen);
+                    //           listView.getItems().add("a400405000 50    5sd");
+                    //           listView.getItems().add("a400405000 50    5sd");
+                    //       }
+                    //   });
+
+
         //    menu.getItems().add(new MenuItem("Sortieren nach Vorname"));
-        //    MenuItem aufsteigendVorname = new MenuItem("Aufsteigend");
+        //  MenuItem aufsteigendVorname = new MenuItem("Aufsteigend");
         //
         //hier der Befehl
         //    aufsteigendVorname.setAccelerator(listView.getItems().add("asd"));
@@ -289,6 +347,28 @@ public class App extends Application {
 
     }
 
+    public void onOpenFileClick(ActionEvent e) {
+        //Die ListView hier dann bearbeiten
+
+
+     //   SortDirection nextDirection = null;
+     //   if(this.nameComparator.getDirection() == SortDirection.ASCENDING) {
+     //       nextDirection = SortDirection.DESCENDING;
+     //   } else {
+     //       nextDirection = SortDirection.ASCENDING;
+     //   }
+//
+     //   this.nameComparator.setDirection(nextDirection);
+     //   this.ageComparator.setDirection(nextDirection);
+
+
+    }
+
+    void openFile(ActionEvent event){
+        FileChooser chooser = new FileChooser();
+        File file = chooser.showOpenDialog(scene.getWindow());
+        Path path = file.toPath();
+    }
 
     public static void main(String[] args) {
         launch(args);
