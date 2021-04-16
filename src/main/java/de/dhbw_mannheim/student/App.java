@@ -55,6 +55,7 @@ import javafx.scene.control.SeparatorMenuItem;
 
 import javafx.scene.layout.HBox;
 
+import javax.imageio.plugins.tiff.ExifParentTIFFTagSet;
 import javax.print.attribute.standard.MediaSize;
 import javax.swing.*;
 
@@ -103,7 +104,9 @@ public class App extends Application {
     private TableView<Person> table;
     private List<Person> listPersonPath;
     private Scene scene;
-    private Path path1;
+    private String[] speicherarry = new String[255];
+    private ListView<Person> listView;
+    private Path path1 = Paths.get("C:\\test.txt");
     private OrderedComparator <Person> aktuellerOperato;
 
 
@@ -122,7 +125,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         table = new TableView<Person>();
-       //nicht nötig String[] speicherarry = new String[255];
+
 
 
         stage.setTitle("Aufgabe 6");
@@ -161,62 +164,22 @@ public class App extends Application {
 
         ObservableList<String> list = FXCollections.observableArrayList("asdsa");
         list.add("loadPerson");
-        ListView<Person> listView = new ListView<Person>();
+        listView = new ListView<Person>();
       //nicht nötig  listView.setItems(list);
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
         //Datei auswählen
+        dateiOeffnen.setOnAction(this::onOpenFile);
 
-        dateiSchließen.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                listView.getItems().clear();
-                //speicherarray muss geleert werden
-            }
-        });
-
-        dateiOeffnen.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                int StringsInArray=0;
-                FileChooser chooser = new FileChooser();
-
-
-                File file = chooser.showOpenDialog(scene.getWindow());
-
-
-                Path path = file.toPath();
-                path1 =path;
-
-             //nicht nötig   String datensatz = null;
-             //nicht nötig   try {
-             //nicht nötig       Scanner scanner = new Scanner(file);
-             //nicht nötig       while (scanner.hasNextLine()) {
-             //nicht nötig           datensatz = scanner.nextLine();
-//nicht nötig
-             //nicht nötig           speicherarry[StringsInArray]= datensatz;
-             //nicht nötig           listView.getItems().add(datensatz);
-             //nicht nötig           StringsInArray++;
-//nicht nötig
-             //nicht nötig       }
-             //nicht nötig       scanner.close();
-             //nicht nötig       //speicherarry= new String[StringsInArray];
-//nicht nötig
-             //nicht nötig   } catch (FileNotFoundException e) {
-             //nicht nötig       System.out.println("Datei konnte nicht gefunden werden");
-             //nicht nötig       e.printStackTrace();
-//nicht nötig
-             //nicht nötig   }
-
-            }
-        });
-
-       // menuItemOpenFile.setOnAction(this::onOpenFileClick);
         PersonService service = new PersonService();
-     //   service.loadPersons(path1);
+        //   service.loadPersons(path1);
         List<Person> persons = service.loadPersons(path1);
-        for(Person person : persons) {
+        for (Person person : persons) {
             listView.getItems().add(person);
         }
+
+
+
 
 
      //   subMenu1.setOnAction(new EventHandler<ActionEvent>() {
@@ -237,8 +200,6 @@ public class App extends Application {
      //           this.ageComparator.setDirection(nextDirection);
      //       }
      //   });
-
-
 
 
         ToggleGroup difficultyToggle = new ToggleGroup();
@@ -368,10 +329,54 @@ public class App extends Application {
 
 
 
-    void openFile(ActionEvent event){
-        FileChooser chooser = new FileChooser();
-        File file = chooser.showOpenDialog(scene.getWindow());
-        Path path = file.toPath();
+    void onOpenFile(ActionEvent e){
+               // int StringsInArray=0;
+
+                if(e.getSource() == this.dateiOeffnen) {
+                    FileChooser chooser = new FileChooser();
+
+                    File file = chooser.showOpenDialog(scene.getWindow());
+
+                    Path path = file.toPath();
+                    path1 = path;
+
+
+                }
+                else if (e.getSource() == this.dateiSchließen){
+
+                }
+                else if(e.getSource() == this.subMenu1){
+
+                }
+                else if(e.getSource() == this.subMenu2){
+
+                }
+                else if(e.getSource() == this.richttung){
+
+                }
+
+
+               //   String datensatz = null;
+               //   try {
+               //       Scanner scanner = new Scanner(file);
+               //       while (scanner.hasNextLine()) {
+               //           datensatz = scanner.nextLine();
+
+               //           speicherarry[StringsInArray]= datensatz;
+               //           listView.getItems().add(datensatz);
+               //           StringsInArray++;
+
+               //       }
+               //       scanner.close();
+               //       //speicherarry= new String[StringsInArray];
+
+               //   } catch (FileNotFoundException e) {
+               //       System.out.println("Datei konnte nicht gefunden werden");
+               //       e.printStackTrace();
+
+               //   }
+
+
     }
 
     public static void main(String[] args) {
