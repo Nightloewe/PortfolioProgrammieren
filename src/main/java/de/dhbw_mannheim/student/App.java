@@ -22,6 +22,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import javafx.stage.FileChooser;
 import java.nio.file.*;
 import javafx.scene.Scene;
@@ -38,6 +39,7 @@ import javafx.collections.FXCollections;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
+import java.util.Scanner;
 import javafx.stage.FileChooser;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.CheckMenuItem;
@@ -106,10 +108,10 @@ public class App extends Application {
     private Scene scene;
     private String[] speicherarry = new String[255];
     private ListView<Person> listView;
-    private Path path1 = Paths.get("C:\\test.txt");
+    private Path path1 ;  //C:/Users/nilsf/Desktop/new 8.txt;
     private OrderedComparator <Person> aktuellerOperato;
-
-
+    private Scanner s;
+    private static String fullPath ="C:\\Users\\nilsf\\Desktop\\new 8.txt" ;
     public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private static NameComparator nameComparator = new NameComparator();
     private static AgeComparator ageComparator = new AgeComparator();
@@ -171,12 +173,6 @@ public class App extends Application {
         //Datei auswählen
         dateiOeffnen.setOnAction(this::onOpenFile);
 
-        PersonService service = new PersonService();
-        //   service.loadPersons(path1);
-        List<Person> persons = service.loadPersons(path1);
-        for (Person person : persons) {
-            listView.getItems().add(person);
-        }
 
 
 
@@ -329,16 +325,35 @@ public class App extends Application {
 
 
 
-    void onOpenFile(ActionEvent e){
+    void onOpenFile(ActionEvent e) {
                // int StringsInArray=0;
 
                 if(e.getSource() == this.dateiOeffnen) {
                     FileChooser chooser = new FileChooser();
 
-                    File file = chooser.showOpenDialog(scene.getWindow());
+                    File file = new File("");
+                    file = chooser.showOpenDialog(scene.getWindow());
 
-                    Path path = file.toPath();
-                    path1 = path;
+
+
+                    fullPath = file.getAbsolutePath();
+
+                    path1=Paths.get(fullPath);
+                    try {
+                        Pathausfuehren(fullPath);
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+
+                    //    path1 = path;
+
+              // catch(FileNotFoundException ea){
+              //     path1=Paths.get("C:/Users/nilsf/Desktop/new 8.txt");
+
+              //     }
+                 //   if(path1 == null ){
+                 //       path1=C:/Users/nilsf/Desktop/new 8.txt;
+                 //   }
 
 
                 }
@@ -377,6 +392,15 @@ public class App extends Application {
                //   }
 
 
+    }
+    public void Pathausfuehren(String fullPath)  throws Exception {
+        PersonService service = new PersonService();
+        service.loadPersons(path1);
+        List<Person> persons = service.loadPersons(Paths.get(fullPath));        //Hier liegt der Fehler !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        for (Person person : persons) {
+            listView.getItems().add(person);
+        }
+     //  listView.getItems().add(fullPath);
     }
 
     public static void main(String[] args) {
