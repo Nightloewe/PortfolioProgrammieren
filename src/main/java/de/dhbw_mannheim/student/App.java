@@ -77,8 +77,8 @@ public class App extends Application {
     private MenuItem dateiSchließen;
     private MenuItem sortNachname;
     private MenuItem sortAlter;
-    private MenuItem aufsteigendNachname;
-    private MenuItem absteigendNachname;
+    private MenuItem aufsteigend;
+    private MenuItem absteigend;
     private MenuItem aufsteigendAlter;
     private MenuItem absteigendAlter;
     private MenuItem subMenu1;
@@ -129,14 +129,16 @@ public class App extends Application {
   //      }
   //  };
 
-
+    private NameComparator nameComparator;
+    private AgeComparator ageComparator;
+    private Comparator<Person> active = nameComparator;
 
 
 
     @Override
     public void start(Stage stage) throws Exception {
         table = new TableView<Person>();
-
+        List<Person> persons;
 
 
         stage.setTitle("Aufgabe 6");
@@ -145,10 +147,7 @@ public class App extends Application {
         menuBar = new MenuBar();
 
 
-        RadioMenuItem1 = new RadioMenuItem("Aufsteigend");
-        RadioMenuItem2 = new RadioMenuItem("Absteigend");
-        RadioMenuItem3 = new RadioMenuItem("Aufsteigend");
-        RadioMenuItem4 = new RadioMenuItem("Absteigend");
+
 
         datei = new Menu("Datei ");
         dateiOeffnen = new MenuItem("Datei öffnen");
@@ -158,22 +157,18 @@ public class App extends Application {
 
         menu = new Menu("Sortierung ");
         sortNachname = new MenuItem("Nach Nachnamen sortieren ");
-        aufsteigendNachname = new MenuItem("Aufsteigend");
-        absteigendNachname = new MenuItem("Absteigend");
+        sortAlter = new MenuItem("Nach Alter sortiern ");
 
         Separator sep = new Separator(Orientation.HORIZONTAL);
 
 
-        sortAlter = new MenuItem("Nach Alter sortiern ");
-        aufsteigendAlter = new MenuItem("Aufsteigend ");
-        absteigendAlter = new MenuItem("Absteigend ");
+        aufsteigend = new MenuItem("Aufsteigend ");
+        absteigend = new MenuItem("Absteigend ");
 
         menu.getItems().add(sortNachname);
-        menu.getItems().add(aufsteigendNachname);
-        menu.getItems().add(absteigendNachname);
         menu.getItems().add(sortAlter);
-        menu.getItems().add(aufsteigendAlter);
-        menu.getItems().add(absteigendAlter);
+        menu.getItems().add(aufsteigend);
+        menu.getItems().add(absteigend);
 
 
 
@@ -192,6 +187,10 @@ public class App extends Application {
         //Datei auswählen
         dateiOeffnen.setOnAction(this::onOpenFile);
         dateiSchließen.setOnAction(this::onOpenFile);
+        sortNachname.setOnAction(this::onOpenFile);
+        sortAlter.setOnAction(this::onOpenFile);
+        aufsteigend.setOnAction(this::onOpenFile);
+        absteigend.setOnAction(this::onOpenFile);
 
 
 
@@ -365,70 +364,35 @@ public class App extends Application {
                         exception.printStackTrace();
                     }
 
-                    //    path1 = path;
-
-              // catch(FileNotFoundException ea){
-              //     path1=Paths.get("C:/Users/nilsf/Desktop/new 8.txt");
-
-              //     }
-                 //   if(path1 == null ){
-                 //       path1=C:/Users/nilsf/Desktop/new 8.txt;
-                 //   }
-
 
                 }
                 else if (e.getSource() == this.dateiSchließen){
                     listView.getItems().clear();
+                    persons.clear();
                 }
-
-
                 else if(e.getSource() == this.sortNachname){
-
+                    active = ageComparator;
+                    listView.getItems().clear();
+                    sortiierenLassen();
                 }
                 else if(e.getSource() == this.sortAlter){
-
+                    active = ageComparator;
+                    listView.getItems().clear();
+                    sortiierenLassen();
                 }
-                else if(e.getSource() == this.absteigendNachname){
-
+                else if(e.getSource() == this.aufsteigend){
+                    this.nameComparator.setDirection(SortDirection.ASCENDING);
+                    this.ageComparator.setDirection(SortDirection.ASCENDING);
                 }
-
-
-               //   String datensatz = null;
-               //   try {
-               //       Scanner scanner = new Scanner(file);
-               //       while (scanner.hasNextLine()) {
-               //           datensatz = scanner.nextLine();
-
-               //           speicherarry[StringsInArray]= datensatz;
-               //           listView.getItems().add(datensatz);
-               //           StringsInArray++;
-
-               //       }
-               //       scanner.close();
-               //       //speicherarry= new String[StringsInArray];
-
-               //   } catch (FileNotFoundException e) {
-               //       System.out.println("Datei konnte nicht gefunden werden");
-               //       e.printStackTrace();
-
-               //   }
-
-
+                else if(e.getSource() == this.absteigend){
+                    this.nameComparator.setDirection(SortDirection.DESCENDING);
+                    this.ageComparator.setDirection(SortDirection.DESCENDING);
+                }
     }
-    public SortDirection nextDirection = null;
-    public SortDirection nameComparator = SortDirection.ASCENDING;
-    public SortDirection getDirection;
-
-    Comparator nextDirektion = null;
-    Comparator nameComarator;
-    Comparator ageComparator;
-    Comparator getDirection;
-
-    public void setDirection(SortDirection getDirection){
-       // nextDirection = null;
 
 
 
+    public void setDirection(SortDirection nextDirection){
         if(this.nameComparator.getDirection() == SortDirection.ASCENDING) {
             nextDirection = SortDirection.DESCENDING;
         } else {
@@ -436,18 +400,23 @@ public class App extends Application {
         }
     }
 
-    public void getDirection(){
-
-    }
 
     public void Pathausfuehren(String fullPath)  throws Exception {
         PersonService service = new PersonService();
         service.loadPersons(path1);
-        List<Person> persons = service.loadPersons(Paths.get(fullPath));        //Hier liegt der Fehler !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        persons = service.loadPersons(Paths.get(fullPath));
         for (Person person : persons) {
             listView.getItems().add(person);
         }
      //  listView.getItems().add(fullPath);
+    }
+
+    public void sortiierenLassen (){
+        PersonService service = new PersonService();
+        service.sort(persons, active);
+        for (Person person : persons) {
+            listView.getItems().add(person);
+        }
     }
 
     public static void main(String[] args) {
