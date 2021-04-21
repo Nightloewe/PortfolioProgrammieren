@@ -75,6 +75,12 @@ public class App extends Application {
 
     private MenuItem dateiOeffnen;
     private MenuItem dateiSchließen;
+    private MenuItem sortNachname;
+    private MenuItem sortAlter;
+    private MenuItem aufsteigendNachname;
+    private MenuItem absteigendNachname;
+    private MenuItem aufsteigendAlter;
+    private MenuItem absteigendAlter;
     private MenuItem subMenu1;
     private MenuItem subMenu2;
     private MenuItem richttung;
@@ -113,15 +119,18 @@ public class App extends Application {
     private Scanner s;
     private static String fullPath ="C:\\Users\\nilsf\\Desktop\\new 8.txt" ;
     public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    private static NameComparator nameComparator = new NameComparator();
-    private static AgeComparator ageComparator = new AgeComparator();
+ //   private static NameComparator nameComparator = new NameComparator();
+ //   private static AgeComparator ageComparator = new AgeComparator();
 
-    private static Comparator aktivComparator = new Comparator() {
-        @Override
-        public int compare(Object o1, Object o2) {
-            return 0;
-        }
-    };
+  //  private static Comparator aktivComparator = new Comparator() {
+  //      @Override
+  //      public int compare(Object o1, Object o2) {
+  //          return 0;
+  //      }
+  //  };
+
+
+
 
 
     @Override
@@ -148,13 +157,23 @@ public class App extends Application {
         datei.getItems().add(dateiSchließen);
 
         menu = new Menu("Sortierung ");
-        subMenu1 = new MenuItem("Nach Nachnamen sortieren ");
-        MenuItem aufsteigendVorname = new MenuItem("Aufsteigend");
-        subMenu2 = new MenuItem("Nach Vorname sortiern ");
-        richttung = new MenuItem("Sortierrichtung ");
-        menu.getItems().add(subMenu1);
-        menu.getItems().add(subMenu2);
-        menu.getItems().add(richttung);
+        sortNachname = new MenuItem("Nach Nachnamen sortieren ");
+        aufsteigendNachname = new MenuItem("Aufsteigend");
+        absteigendNachname = new MenuItem("Absteigend");
+
+        Separator sep = new Separator(Orientation.HORIZONTAL);
+
+
+        sortAlter = new MenuItem("Nach Alter sortiern ");
+        aufsteigendAlter = new MenuItem("Aufsteigend ");
+        absteigendAlter = new MenuItem("Absteigend ");
+
+        menu.getItems().add(sortNachname);
+        menu.getItems().add(aufsteigendNachname);
+        menu.getItems().add(absteigendNachname);
+        menu.getItems().add(sortAlter);
+        menu.getItems().add(aufsteigendAlter);
+        menu.getItems().add(absteigendAlter);
 
 
 
@@ -172,6 +191,7 @@ public class App extends Application {
 
         //Datei auswählen
         dateiOeffnen.setOnAction(this::onOpenFile);
+        dateiSchließen.setOnAction(this::onOpenFile);
 
 
 
@@ -358,15 +378,17 @@ public class App extends Application {
 
                 }
                 else if (e.getSource() == this.dateiSchließen){
+                    listView.getItems().clear();
+                }
+
+
+                else if(e.getSource() == this.sortNachname){
 
                 }
-                else if(e.getSource() == this.subMenu1){
+                else if(e.getSource() == this.sortAlter){
 
                 }
-                else if(e.getSource() == this.subMenu2){
-
-                }
-                else if(e.getSource() == this.richttung){
+                else if(e.getSource() == this.absteigendNachname){
 
                 }
 
@@ -393,6 +415,31 @@ public class App extends Application {
 
 
     }
+    public SortDirection nextDirection = null;
+    public SortDirection nameComparator = SortDirection.ASCENDING;
+    public SortDirection getDirection;
+
+    Comparator nextDirektion = null;
+    Comparator nameComarator;
+    Comparator ageComparator;
+    Comparator getDirection;
+
+    public void setDirection(SortDirection getDirection){
+       // nextDirection = null;
+
+
+
+        if(this.nameComparator.getDirection() == SortDirection.ASCENDING) {
+            nextDirection = SortDirection.DESCENDING;
+        } else {
+            nextDirection = SortDirection.ASCENDING;
+        }
+    }
+
+    public void getDirection(){
+
+    }
+
     public void Pathausfuehren(String fullPath)  throws Exception {
         PersonService service = new PersonService();
         service.loadPersons(path1);

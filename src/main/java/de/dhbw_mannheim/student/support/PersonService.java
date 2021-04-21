@@ -102,7 +102,12 @@ public class PersonService {
         Object[] result = this.mergeSort(collection.toArray(), (Comparator<Object>) comparator);
 
         //Hier musst du die originale Collection quasi updaten
-        //collection.set(selbe Index, selbes Element wie Index)                                                          //collection.set(selbe Index, selbes Element wie Index)
+        //collection.set(selbe Index, selbes Element wie Index)
+        // collection.set(selbe Index, selbes Element wie Index)
+
+        for(int i = 0; i < collection.size(); i++) {
+            collection.set(i, (T) result[i]);
+        }
     }
 
     /**
