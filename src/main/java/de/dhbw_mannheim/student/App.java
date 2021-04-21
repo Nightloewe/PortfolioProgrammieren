@@ -119,15 +119,6 @@ public class App extends Application {
     private Scanner s;
     private static String fullPath ="C:\\Users\\nilsf\\Desktop\\new 8.txt" ;
     public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
- //   private static NameComparator nameComparator = new NameComparator();
- //   private static AgeComparator ageComparator = new AgeComparator();
-
-  //  private static Comparator aktivComparator = new Comparator() {
-  //      @Override
-  //      public int compare(Object o1, Object o2) {
-  //          return 0;
-  //      }
-  //  };
 
     private NameComparator nameComparator;
     private AgeComparator ageComparator;
@@ -181,7 +172,6 @@ public class App extends Application {
         ObservableList<String> list = FXCollections.observableArrayList("asdsa");
         list.add("loadPerson");
         listView = new ListView<Person>();
-      //nicht nötig  listView.setItems(list);
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         //Datei auswählen
@@ -195,130 +185,6 @@ public class App extends Application {
 
 
 
-
-
-     //   subMenu1.setOnAction(new EventHandler<ActionEvent>() {
-     //       @Override
-     //       public void handle(ActionEvent event) {
-//
-     //           NameComparator nameComparator = new NameComparator();
-     //           AgeComparator ageComparator = new AgeComparator();
-     //           SortDirection nextDirektion = null;
-//
-     //           if(this.aktivComparator.getDirection() == SortDirection.ASCENDING) {
-     //               nextDirection = SortDirection.DESCENDING;
-     //           } else {
-     //               nextDirection = SortDirection.ASCENDING;
-     //           }
-//
-     //           this.nameComparator.setDirection(nextDirection);
-     //           this.ageComparator.setDirection(nextDirection);
-     //       }
-     //   });
-
-
-        ToggleGroup difficultyToggle = new ToggleGroup();
-
-                    //RadioMenuItem1.setToggleGroup(difficultyToggle);
-                    //RadioMenuItem2.setToggleGroup(difficultyToggle);
-                    //RadioMenuItem3.setToggleGroup(difficultyToggle);
-                    //RadioMenuItem4.setToggleGroup(difficultyToggle);
-
-
-
-
-
-
-
-
-
-        //   }
-
-
-
-    //  menuItemOpenFile.setOnAction(this::onOpenFileClick);
-
-                    //   RadioMenuItem1.setOnAction(new EventHandler<ActionEvent>() {
-                    //       @Override
-                    //       public void handle(ActionEvent actionEvent) {
-                    //           listView.getItems().clear();
-                    //           listView.getItems().add("Personenangaben");
-                    //           listView.getItems().add("asd");
-                    //           listView.getItems().add("asd");
-                    //           listView.getItems().add("asd");
-                    //       }
-                    //   });
-                    //   RadioMenuItem2.setOnAction(new EventHandler<ActionEvent>() {
-                    //       @Override
-                    //       public void handle(ActionEvent actionEvent) {
-                    //           listView.getItems().clear();
-                    //           listView.getItems().add("Personenangaben");
-                    //           listView.getItems().add("assssssd");
-                    //           listView.getItems().add("assssssd");
-                    //           listView.getItems().add("assssssd");
-                    //       }
-                    //   });
-                    //   RadioMenuItem3.setOnAction(new EventHandler<ActionEvent>() {
-                    //       @Override
-                    //       public void handle(ActionEvent actionEvent) {
-                    //           listView.getItems().clear();
-                    //           listView.getItems().add("Personenangaben");
-                    //           listView.getItems().add("asdas sad 545d");
-                    //           listView.getItems().add("asdas sad 545d");
-                    //           listView.getItems().add("asdas sad 545d");
-                    //       }
-                    //   });
-                    //   RadioMenuItem4.setOnAction(new EventHandler<ActionEvent>() {
-                    //       @Override
-                    //       public void handle(ActionEvent actionEvent) {
-//
-                    //           listView.getItems().clear();
-                    //           listView.getItems().add("Personenangaben");
-                    //           //     listView.getItems().add(Personen);
-                    //           listView.getItems().add("a400405000 50    5sd");
-                    //           listView.getItems().add("a400405000 50    5sd");
-                    //       }
-                    //   });
-
-
-        //    menu.getItems().add(new MenuItem("Sortieren nach Vorname"));
-        //  MenuItem aufsteigendVorname = new MenuItem("Aufsteigend");
-        //
-        //hier der Befehl
-        //    aufsteigendVorname.setAccelerator(listView.getItems().add("asd"));
-        //    menu.getItems().add(aufsteigendVorname);
-        //    MenuItem absteigendVorname = new MenuItem("Absteigend");
-        //    //hier der Befehl
-        //    menu.getItems().add(absteigendVorname);
-//
-        //    menu.getItems().add(new MenuItem("Sortieren nach Alter"));
-        //    MenuItem aufsteigendAlter = new MenuItem("Aufsteigend");
-        //    //hier der Befehl
-        //    menu.getItems().add(aufsteigendAlter);
-        //    MenuItem absteigendAlter = new MenuItem("Absteigend");
-        //    //hier der Befehl
-        //    menu.getItems().add(absteigendVorname);
-
-
-//    menu.getItems().add(new MenuItem("Sortieren nach Vorname"));
-        //    MenuItem aufsteigendVorname = new MenuItem("Aufsteigend");
-        //
-        //hier der Befehl
-        //    aufsteigendVorname.setAccelerator(listView.getItems().add("asd"));
-        //    menu.getItems().add(aufsteigendVorname);
-        //    MenuItem absteigendVorname = new MenuItem("Absteigend");
-        //    //hier der Befehl
-        //    menu.getItems().add(absteigendVorname);
-//
-        //    menu.getItems().add(new MenuItem("Sortieren nach Alter"));
-        //    MenuItem aufsteigendAlter = new MenuItem("Aufsteigend");
-        //    //hier der Befehl
-        //    menu.getItems().add(aufsteigendAlter);
-        //    MenuItem absteigendAlter = new MenuItem("Absteigend");
-        //    //hier der Befehl
-        //    menu.getItems().add(absteigendVorname);
-
-
         VBox root = new VBox(menuBar, listView);
         scene = new Scene(root, 640, 480);
         stage.setScene(scene);
@@ -326,20 +192,6 @@ public class App extends Application {
 
 
     }
-
-    //public void onOpenFileClick(ActionEvent e) {
-        //Die ListView hier dann bearbeiten
-
-
-     //   SortDirection nextDirection = null;
-     //   if(this.nameComparator.getDirection() == SortDirection.ASCENDING) {
-     //       nextDirection = SortDirection.DESCENDING;
-     //   } else {
-     //       nextDirection = SortDirection.ASCENDING;
-     //   }
-//
-     //   this.nameComparator.setDirection(nextDirection);
-     //   this.ageComparator.setDirection(nextDirection);
 
 
 
@@ -373,12 +225,12 @@ public class App extends Application {
                 else if(e.getSource() == this.sortNachname){
                     active = ageComparator;
                     listView.getItems().clear();
-                    sortiierenLassen();
+                    sort();
                 }
                 else if(e.getSource() == this.sortAlter){
                     active = ageComparator;
                     listView.getItems().clear();
-                    sortiierenLassen();
+                    sort();
                 }
                 else if(e.getSource() == this.aufsteigend){
                     this.nameComparator.setDirection(SortDirection.ASCENDING);
@@ -411,7 +263,7 @@ public class App extends Application {
      //  listView.getItems().add(fullPath);
     }
 
-    public void sortiierenLassen (){
+    public void sort (){
         PersonService service = new PersonService();
         service.sort(persons, active);
         for (Person person : persons) {
@@ -422,14 +274,6 @@ public class App extends Application {
     public static void main(String[] args) {
         launch(args);
 
-
-
-
-
-        //    PersonService service = new PersonService();
-        //    List<Person> persons = service.loadPersons(Paths.get("C:\test.txt"));
-        //    for (Person person : persons) {
-        //        System.out.println(person);
     }
 
 }
