@@ -230,7 +230,7 @@ public class AppArrayList<T> implements List<T> {
 
     @Override
     public int indexOf(Object o) {
-        for(int i = 0; i < 0; i++) {
+        for(int i = 0; i < this.count; i++) {
             Object obj = this.array[i];
 
             if(obj == o
@@ -262,7 +262,7 @@ public class AppArrayList<T> implements List<T> {
         throw new UnsupportedOperationException();
     }
 
-    private class ArrayIterator<T> implements Iterator<T> {
+    private static class ArrayIterator<T> implements Iterator<T> {
         private int index;
         private AppArrayList<T> list;
 
@@ -274,7 +274,7 @@ public class AppArrayList<T> implements List<T> {
 
         @Override
         public boolean hasNext() {
-            return index < list.size();
+            return index < list.size() - 1;
         }
 
         @Override
