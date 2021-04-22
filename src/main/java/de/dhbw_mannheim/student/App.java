@@ -1,5 +1,6 @@
 package de.dhbw_mannheim.student;
 import java.io.File;
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.*;
 import java.util.List;
 import de.dhbw_mannheim.student.model.Person;
@@ -71,7 +72,8 @@ public class App extends Application {
 
         Sortmenu.getItems().add(sortNachname);
         Sortmenu.getItems().add(sortAlter);
-        Separator sep = new Separator();
+        SeparatorMenuItem sep = new SeparatorMenuItem();
+        Sortmenu.getItems().addAll(sep);
         Sortmenu.getItems().add(aufsteigend);
         Sortmenu.getItems().add(absteigend);
 
@@ -163,6 +165,7 @@ public class App extends Application {
                     listView.getItems().clear();
                     sort();
                 }
+
 
                 else if(e.getSource() == this.absteigend){
                     //Setzung der Sortierrichtung
