@@ -73,11 +73,11 @@ public class App extends Application {
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         //Betätigung der MenuItems
-        dateiOeffnen.setOnAction(this::onOpenFile);
-        dateiSchließen.setOnAction(this::onOpenFile);
-        sortNachname.setOnAction(this::onOpenFile);
-        sortAlter.setOnAction(this::onOpenFile);
-        changeDirectionSortierung.setOnAction(this::onOpenFile);
+        dateiOeffnen.setOnAction(this::onClick);
+        dateiSchließen.setOnAction(this::onClick);
+        sortNachname.setOnAction(this::onClick);
+        sortAlter.setOnAction(this::onClick);
+        changeDirectionSortierung.setOnAction(this::onClick);
 
 
         VBox root = new VBox(menuBar, listView);
@@ -86,7 +86,7 @@ public class App extends Application {
         stage.show();
     }
 
-    void onOpenFile(ActionEvent e) {
+    void onClick(ActionEvent e) {
         if(e.getSource() == this.dateiOeffnen) {
             //Fenster zum Auswählen  einer Datei
             FileChooser chooser = new FileChooser();
@@ -146,7 +146,6 @@ public class App extends Application {
             sort();
         }
     }
-
 
     //Setzung der Sortierrichtung
     public void changeDirection() {
