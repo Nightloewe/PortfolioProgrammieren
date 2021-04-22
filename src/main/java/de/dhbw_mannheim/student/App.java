@@ -62,7 +62,7 @@ public class App extends Application {
         sortMenu.getItems().add(sortNachname);
         sortMenu.getItems().add(sortAlter);
         SeparatorMenuItem sep = new SeparatorMenuItem();
-        sortMenu.getItems().addAll(sep);
+        sortMenu.getItems().add(sep);
         sortMenu.getItems().add(changeDirectionSortierung);
 
         menuBar.getMenus().add(datei);
@@ -71,6 +71,7 @@ public class App extends Application {
 
         listView = new ListView<>();
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listView.setPlaceholder(new Label("Bitte öffnen Sie eine Datei."));
 
         //Betätigung der MenuItems
         dateiOeffnen.setOnAction(this::onClick);
