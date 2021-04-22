@@ -115,10 +115,6 @@ public class App extends Application {
 
                 if(e.getSource() == this.dateiOeffnen) {
 
-                    //Falls die alten Daten vor dem Öffnen einer neuen Datei nicht geschlossen wurde
-                    //wird diese aus der ListView gelöscht
-                    listView.getItems().clear();
-
                     //Fenster zum Auswählen  einer Datei
                     FileChooser chooser = new FileChooser();
                     File file = new File("");
@@ -130,6 +126,7 @@ public class App extends Application {
 
                     path1=Paths.get(fullPath);
                     try {
+
                         Pathausfuehren(fullPath);
                     } catch (Exception exception) {
                         exception.printStackTrace();
