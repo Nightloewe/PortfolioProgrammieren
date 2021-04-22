@@ -52,7 +52,7 @@ public class App extends Application {
 
         List<Person> persons;
 
-        stage.setTitle("Sortierung von Datensäzen");
+        stage.setTitle("Sortierung von Datensätzen");
 
         Frame frame = new Frame();
         menuBar = new MenuBar();
@@ -115,11 +115,11 @@ public class App extends Application {
 
                 if(e.getSource() == this.dateiOeffnen) {
 
-                    //Falls die alten Daten vor dem öffnen einer neuen Datei nicht geschlossen wurde
+                    //Falls die alten Daten vor dem Öffnen einer neuen Datei nicht geschlossen wurde
                     //wird diese aus der ListView gelöscht
                     listView.getItems().clear();
 
-                    //Fenster zum asuwählen einer Datei
+                    //Fenster zum Auswählen  einer Datei
                     FileChooser chooser = new FileChooser();
                     File file = new File("");
                     file = chooser.showOpenDialog(scene.getWindow());
@@ -188,7 +188,8 @@ public class App extends Application {
         }
     }
 
-    //Pfad wird in loadPerson methoder der Klasse Personservice als pbergabeparameter übergeben und es wird ein Objekte aus den Daten welche in einer Liste gespeichert werden
+    //Pfad wird in loadPerson Methoder der Klasse Personservice als Übergabeparameter übergeben
+    //es werden Objekte aus den Daten, welche in einer Liste gespeichert werden und in der ObservableList ausgegeben werden
     public void Pathausfuehren(String fullPath)  throws Exception {
 
         persons.addAll(service.loadPersons(path1));
