@@ -7,4 +7,5 @@ public class FileIsDirectoryException extends IOException {
     public FileIsDirectoryException(String message) {
         super(message);
     }
+
 }

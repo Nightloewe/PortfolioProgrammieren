@@ -1,6 +1,7 @@
 package de.dhbw_mannheim.student;
 import java.io.File;
-import java.nio.file.attribute.UserPrincipalNotFoundException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 import de.dhbw_mannheim.student.exceptions.FileIsDirectoryException;
@@ -11,8 +12,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import javafx.stage.FileChooser;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -21,7 +20,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.ListView;
 import javafx.collections.FXCollections;
-import java.awt.*;
 
 public class App extends Application {
 
@@ -29,60 +27,48 @@ public class App extends Application {
     private Menu datei;
     private MenuItem dateiOeffnen;
     private MenuItem dateiSchließen;
-    private Menu Sortmenu;
+    private Menu sortMenu;
     private MenuItem sortNachname;
     private MenuItem sortAlter;
     private MenuItem changeDirectionSortierung;
     private Scene scene;
     private ListView<Person> listView;
-    private Path path1 ;
-    private String fullPath  ;
     private NameComparator nameComparator = new NameComparator();
     private AgeComparator ageComparator = new AgeComparator();
     private Comparator<Person> active = nameComparator;
-    private AppArrayList persons = new AppArrayList();
-    private PersonService service = new PersonService();
-    private ObservableList<String> list;
 
+    private PersonService service = new PersonService();
+    private ObservableList<Person> persons;
 
     @Override
     public void start(Stage stage) throws Exception {
-
-        TableView table = new TableView<Person>();
-
-        List<Person> persons;
-
         stage.setTitle("Sortierung von Datensätzen");
-
-        Frame frame = new Frame();
         menuBar = new MenuBar();
 
         datei = new Menu("Datei ");
         dateiOeffnen = new MenuItem("Datei öffnen");
         dateiSchließen = new MenuItem("Datei schließen");
+        dateiSchließen.setDisable(true);
         datei.getItems().add(dateiOeffnen);
         datei.getItems().add(dateiSchließen);
 
-        Sortmenu = new Menu("Sortierung ");
+        sortMenu = new Menu("Sortierung ");
+        sortMenu.setVisible(false);
         sortNachname = new MenuItem("Nach Nachnamen sortieren ");
         sortAlter = new MenuItem("Nach Alter sortiern ");
 
         changeDirectionSortierung = new MenuItem("Absteigend sortieren");
 
-        Sortmenu.getItems().add(sortNachname);
-        Sortmenu.getItems().add(sortAlter);
+        sortMenu.getItems().add(sortNachname);
+        sortMenu.getItems().add(sortAlter);
         SeparatorMenuItem sep = new SeparatorMenuItem();
         sortMenu.getItems().addAll(sep);
         sortMenu.getItems().add(changeDirectionSortierung);
 
         menuBar.getMenus().add(datei);
 
-        menuBar.getMenus().add(Sortmenu);
+        menuBar.getMenus().add(sortMenu);
 
-
-        //Erstellung einer Obsererlist in der die Liste mit den Objekten ausgegeben wird
-        list = FXCollections.observableArrayList();
-        list.add("loadPerson");
         listView = new ListView<Person>();
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -98,27 +84,20 @@ public class App extends Application {
         scene = new Scene(root, 640, 480);
         stage.setScene(scene);
         stage.show();
-
-
     }
 
-
-
-
     void onOpenFile(ActionEvent e) {
-               // int StringsInArray=0;
+        if(e.getSource() == this.dateiOeffnen) {
+            //Fenster zum Auswählen  einer Datei
+            FileChooser chooser = new FileChooser();
+            File file = chooser.showOpenDialog(scene.getWindow());
 
-                if(e.getSource() == this.dateiOeffnen) {
-                    //Fenster zum Auswählen  einer Datei
-                    FileChooser chooser = new FileChooser();
-                    File file = new File("");
-                    file = chooser.showOpenDialog(scene.getWindow());
-
-
-                    //Speicherung des Pfades
-                    fullPath = file.getAbsolutePath();
-
-                    path1=Paths.get(fullPath);
+            if(file == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Es wurde keine Datei ausgewählt!");
+                alert.show();
+                return;
+            }
 
             try {
                 this.persons = FXCollections.observableArrayList(service.loadPersons(file.toPath()));
@@ -170,8 +149,8 @@ public class App extends Application {
 
 
     //Setzung der Sortierrichtung
-    public void setDirection(SortDirection nextDirection){
-
+    public void changeDirection() {
+        SortDirection nextDirection = null;
         if(this.nameComparator.getDirection() == SortDirection.ASCENDING) {
             nextDirection = SortDirection.DESCENDING;
             changeDirectionSortierung.setText("Aufsteigend sortieren");
@@ -179,28 +158,17 @@ public class App extends Application {
             nextDirection = SortDirection.ASCENDING;
             changeDirectionSortierung.setText("Absteigend sortieren");
         }
+
+        this.nameComparator.setDirection(nextDirection);
+        this.ageComparator.setDirection(nextDirection);
     }
 
-    //Pfad wird in loadPerson Methoder der Klasse Personservice als Übergabeparameter übergeben
-    //es werden Objekte aus den Daten, welche in einer Liste gespeichert werden und in der ObservableList ausgegeben werden
-    public void Pathausfuehren(String fullPath)  throws Exception {
-
-        persons.addAll(service.loadPersons(path1));
-        listView.getItems().addAll(persons);
-
-    }
-
-    //Ausführung der Sortierung
-    public void sort (){
-
+    public void sort() {
         service.sort(persons, active);
-        listView.getItems().addAll(persons);
     }
 
     public static void main(String[] args) {
-
         launch(args);
-
     }
 
 }

@@ -3,7 +3,6 @@ package de.dhbw_mannheim.student.support;
 import de.dhbw_mannheim.student.model.Person;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 
 public class AgeComparator extends OrderedComparator<Person> {
 

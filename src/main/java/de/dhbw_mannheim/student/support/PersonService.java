@@ -9,8 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -41,7 +39,7 @@ public class PersonService {
 
         //Liest die Datei ein und separatiert nach Line Breaks
         List<String> csv = Files.readAllLines(path);
-        List<Person> persons = new ArrayList<>(csv.size());
+        List<Person> persons = new AppArrayList<>(csv.size());
 
         //Iteration über die Einträge
         for (String entry : csv) {
