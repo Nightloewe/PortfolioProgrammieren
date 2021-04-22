@@ -143,7 +143,7 @@ public class App extends Application {
 
                 else if(e.getSource() == this.sortNachname){
                     //Setzung des aktiven Comparators
-                    active = ageComparator;
+                    active = nameComparator;
                     //Unsortierte Liste wird aus ListView entfernt und die sortierte Liste wird eingefügt
                     listView.getItems().clear();
                     sort();
