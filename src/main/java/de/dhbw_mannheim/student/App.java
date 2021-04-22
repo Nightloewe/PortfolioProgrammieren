@@ -2,7 +2,8 @@ package de.dhbw_mannheim.student;
 import java.io.File;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.*;
-import java.util.List;
+
+import de.dhbw_mannheim.student.exceptions.FileIsDirectoryException;
 import de.dhbw_mannheim.student.model.Person;
 import de.dhbw_mannheim.student.support.*;
 import javafx.application.Application;
@@ -31,8 +32,7 @@ public class App extends Application {
     private Menu Sortmenu;
     private MenuItem sortNachname;
     private MenuItem sortAlter;
-    private MenuItem aufsteigend;
-    private MenuItem absteigend;
+    private MenuItem changeDirectionSortierung;
     private Scene scene;
     private ListView<Person> listView;
     private Path path1 ;
@@ -67,15 +67,13 @@ public class App extends Application {
         sortNachname = new MenuItem("Nach Nachnamen sortieren ");
         sortAlter = new MenuItem("Nach Alter sortiern ");
 
-        aufsteigend = new MenuItem("Aufsteigend ");
-        absteigend = new MenuItem("Absteigend ");
+        changeDirectionSortierung = new MenuItem("Absteigend sortieren");
 
         Sortmenu.getItems().add(sortNachname);
         Sortmenu.getItems().add(sortAlter);
         SeparatorMenuItem sep = new SeparatorMenuItem();
-        Sortmenu.getItems().addAll(sep);
-        Sortmenu.getItems().add(aufsteigend);
-        Sortmenu.getItems().add(absteigend);
+        sortMenu.getItems().addAll(sep);
+        sortMenu.getItems().add(changeDirectionSortierung);
 
         menuBar.getMenus().add(datei);
 
@@ -93,10 +91,7 @@ public class App extends Application {
         dateiSchließen.setOnAction(this::onOpenFile);
         sortNachname.setOnAction(this::onOpenFile);
         sortAlter.setOnAction(this::onOpenFile);
-        aufsteigend.setOnAction(this::onOpenFile);
-        absteigend.setOnAction(this::onOpenFile);
-
-
+        changeDirectionSortierung.setOnAction(this::onOpenFile);
 
 
         VBox root = new VBox(menuBar, listView);
@@ -125,53 +120,52 @@ public class App extends Application {
 
                     path1=Paths.get(fullPath);
 
-                    try {
-                        Pathausfuehren(fullPath);
-                    } catch (Exception exception) {
-                        exception.printStackTrace();
-                    }
-                }
+            try {
+                this.persons = FXCollections.observableArrayList(service.loadPersons(file.toPath()));
+                this.listView.setItems(this.persons);
+                sort();
 
-                else if (e.getSource() == this.dateiSchließen){
+                this.dateiSchließen.setDisable(false);
+                this.sortMenu.setVisible(true);
+            } catch(FileNotFoundException ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Datei wurde nicht gefunden!");
+                alert.show();
+            } catch(FileIsDirectoryException ex){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Datei ist ein Ordner!");
+                alert.show();
+            } catch (IOException ex){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Datei ist nicht lesbar!");
+                alert.show();
+            }
+        } else if (e.getSource() == this.dateiSchließen){
+            //this.persons null setzen
+            this.persons = null;
+            //listView setItems auf null setzen
+            listView.setItems(null);
+            //listView.refresh
+            listView.refresh();
+            //name und age Comparator auf Standard Direction setzen (ASCENDING)
+            nameComparator.setDirection(SortDirection.ASCENDING);
+            ageComparator.setDirection(SortDirection.ASCENDING);
 
-                    listView.getItems().clear();
-                    persons.clear();
-                }
-
-                else if(e.getSource() == this.sortNachname){
-                    //Setzung des aktiven Comparators
-                    active = nameComparator;
-                    //Unsortierte Liste wird aus ListView entfernt und die sortierte Liste wird eingefügt
-                    listView.getItems().clear();
-                    sort();
-                }
-
-                else if(e.getSource() == this.sortAlter){
-                    //Setzung des aktiven Comparators
-                    active = ageComparator;
-                    //Unsortierte Liste wird aus ListView entfernt und die sortierte Liste wird eingefügt
-                    listView.getItems().clear();
-                    sort();
-                }
-
-                else if(e.getSource() == this.aufsteigend){
-                    //Setzung der Sortierrichtung
-                    this.nameComparator.setDirection(SortDirection.ASCENDING);
-                    this.ageComparator.setDirection(SortDirection.ASCENDING);
-                    //Neu Sortierte Liste wird eingefügt und die aLte Liste wird entfernt
-                    listView.getItems().clear();
-                    sort();
-                }
-
-
-                else if(e.getSource() == this.absteigend){
-                    //Setzung der Sortierrichtung
-                    this.nameComparator.setDirection(SortDirection.DESCENDING);
-                    this.ageComparator.setDirection(SortDirection.DESCENDING);
-                    //Neu Sortierte Liste wird eingefügt und die aLte Liste wird entfernt
-                    listView.getItems().clear();
-                    sort();
-                }
+            this.dateiSchließen.setDisable(true);
+            this.sortMenu.setVisible(false);
+        } else if(e.getSource() == this.sortNachname){
+            //Setzung des aktiven Comparators
+            active = nameComparator;
+            sort();
+        } else if(e.getSource() == this.sortAlter){
+            //Setzung des aktiven Comparators
+            active = ageComparator;
+            sort();
+        } else if(e.getSource() == this.changeDirectionSortierung){
+            //Sortierrichtung wird geändert
+            changeDirection();
+            sort();
+        }
     }
 
 
@@ -180,8 +174,10 @@ public class App extends Application {
 
         if(this.nameComparator.getDirection() == SortDirection.ASCENDING) {
             nextDirection = SortDirection.DESCENDING;
+            changeDirectionSortierung.setText("Aufsteigend sortieren");
         } else {
             nextDirection = SortDirection.ASCENDING;
+            changeDirectionSortierung.setText("Absteigend sortieren");
         }
     }
 
