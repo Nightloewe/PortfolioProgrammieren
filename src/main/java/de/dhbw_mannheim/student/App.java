@@ -7,7 +7,6 @@ import de.dhbw_mannheim.student.support.*;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.geometry.Orientation;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import java.nio.file.Path;
@@ -24,8 +23,6 @@ import java.awt.*;
 
 public class App extends Application {
 
-    private Frame frame;
-    private TableView table;
     private MenuBar menuBar;
     private Menu datei;
     private MenuItem dateiOeffnen;
@@ -33,31 +30,30 @@ public class App extends Application {
     private Menu Sortmenu;
     private MenuItem sortNachname;
     private MenuItem sortAlter;
-    private Separator sep;
     private MenuItem aufsteigend;
     private MenuItem absteigend;
     private Scene scene;
-    private String[] speicherarry = new String[255];
     private ListView<Person> listView;
     private Path path1 ;
     private String fullPath  ;
-    private NameComparator nameComparator = new NameComparator();;
+    private NameComparator nameComparator = new NameComparator();
     private AgeComparator ageComparator = new AgeComparator();
     private Comparator<Person> active = nameComparator;
     private AppArrayList persons = new AppArrayList();
-
+    private PersonService service = new PersonService();
+    private ObservableList<String> list;
 
 
     @Override
     public void start(Stage stage) throws Exception {
 
-        table = new TableView<Person>();
+        TableView table = new TableView<Person>();
 
         List<Person> persons;
 
         stage.setTitle("Sortierung von Datensäzen");
 
-        frame = new Frame();
+        Frame frame = new Frame();
         menuBar = new MenuBar();
 
         datei = new Menu("Datei ");
@@ -75,16 +71,17 @@ public class App extends Application {
 
         Sortmenu.getItems().add(sortNachname);
         Sortmenu.getItems().add(sortAlter);
-        Separator sep = new Separator(Orientation.HORIZONTAL);
+        Separator sep = new Separator();
         Sortmenu.getItems().add(aufsteigend);
         Sortmenu.getItems().add(absteigend);
 
         menuBar.getMenus().add(datei);
+
         menuBar.getMenus().add(Sortmenu);
 
 
         //Erstellung einer Obsererlist in der die Liste mit den Objekten ausgegeben wird
-        ObservableList<String> list = FXCollections.observableArrayList("asdsa");
+        list = FXCollections.observableArrayList();
         list.add("loadPerson");
         listView = new ListView<Person>();
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -191,21 +188,15 @@ public class App extends Application {
     //Pfad wird in loadPerson methoder der Klasse Personservice als pbergabeparameter übergeben und es wird ein Objekte aus den Daten welche in einer Liste gespeichert werden
     public void Pathausfuehren(String fullPath)  throws Exception {
 
-        PersonService service = new PersonService();
         persons.addAll(service.loadPersons(path1));
-        for (int i=0; i< persons.size();i++) {
-            listView.getItems().add((Person) persons.get(i));
-        }
+        listView.getItems().addAll(persons);
     }
 
     //Ausführung der Sortierung
     public void sort (){
 
-        PersonService service = new PersonService();
         service.sort(persons, active);
-        for (int i=0; i< persons.size();i++) {
-            listView.getItems().add((Person) persons.get(i));
-        }
+        listView.getItems().addAll(persons);
     }
 
     public static void main(String[] args) {
