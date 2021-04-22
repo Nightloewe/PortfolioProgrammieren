@@ -26,7 +26,7 @@ public class App extends Application {
     private MenuBar menuBar;
     private Menu datei;
     private MenuItem dateiOeffnen;
-    private MenuItem dateiSchließen;
+    private MenuItem dateiSchliessen;
     private Menu sortMenu;
     private MenuItem sortNachname;
     private MenuItem sortAlter;
@@ -41,16 +41,16 @@ public class App extends Application {
     private ObservableList<Person> persons;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         stage.setTitle("Sortierung von Datensätzen");
         menuBar = new MenuBar();
 
         datei = new Menu("Datei ");
         dateiOeffnen = new MenuItem("Datei öffnen");
-        dateiSchließen = new MenuItem("Datei schließen");
-        dateiSchließen.setDisable(true);
+        dateiSchliessen = new MenuItem("Datei schließen");
+        dateiSchliessen.setDisable(true);
         datei.getItems().add(dateiOeffnen);
-        datei.getItems().add(dateiSchließen);
+        datei.getItems().add(dateiSchliessen);
 
         sortMenu = new Menu("Sortierung ");
         sortMenu.setVisible(false);
@@ -69,12 +69,12 @@ public class App extends Application {
 
         menuBar.getMenus().add(sortMenu);
 
-        listView = new ListView<Person>();
+        listView = new ListView<>();
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         //Betätigung der MenuItems
         dateiOeffnen.setOnAction(this::onClick);
-        dateiSchließen.setOnAction(this::onClick);
+        dateiSchliessen.setOnAction(this::onClick);
         sortNachname.setOnAction(this::onClick);
         sortAlter.setOnAction(this::onClick);
         changeDirectionSortierung.setOnAction(this::onClick);
@@ -104,7 +104,7 @@ public class App extends Application {
                 this.listView.setItems(this.persons);
                 sort();
 
-                this.dateiSchließen.setDisable(false);
+                this.dateiSchliessen.setDisable(false);
                 this.sortMenu.setVisible(true);
             } catch(FileNotFoundException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -119,7 +119,7 @@ public class App extends Application {
                 alert.setContentText("Datei ist nicht lesbar!");
                 alert.show();
             }
-        } else if (e.getSource() == this.dateiSchließen){
+        } else if (e.getSource() == this.dateiSchliessen){
             //this.persons null setzen
             this.persons = null;
             //listView setItems auf null setzen
@@ -130,7 +130,7 @@ public class App extends Application {
             nameComparator.setDirection(SortDirection.ASCENDING);
             ageComparator.setDirection(SortDirection.ASCENDING);
 
-            this.dateiSchließen.setDisable(true);
+            this.dateiSchliessen.setDisable(true);
             this.sortMenu.setVisible(false);
         } else if(e.getSource() == this.sortNachname){
             //Setzung des aktiven Comparators
@@ -149,7 +149,7 @@ public class App extends Application {
 
     //Setzung der Sortierrichtung
     public void changeDirection() {
-        SortDirection nextDirection = null;
+        SortDirection nextDirection;
         if(this.nameComparator.getDirection() == SortDirection.ASCENDING) {
             nextDirection = SortDirection.DESCENDING;
             changeDirectionSortierung.setText("Aufsteigend sortieren");
