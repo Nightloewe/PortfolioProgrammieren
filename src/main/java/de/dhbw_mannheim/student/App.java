@@ -114,7 +114,6 @@ public class App extends Application {
                // int StringsInArray=0;
 
                 if(e.getSource() == this.dateiOeffnen) {
-
                     //Fenster zum Auswählen  einer Datei
                     FileChooser chooser = new FileChooser();
                     File file = new File("");
@@ -125,8 +124,8 @@ public class App extends Application {
                     fullPath = file.getAbsolutePath();
 
                     path1=Paths.get(fullPath);
-                    try {
 
+                    try {
                         Pathausfuehren(fullPath);
                     } catch (Exception exception) {
                         exception.printStackTrace();
@@ -134,6 +133,7 @@ public class App extends Application {
                 }
 
                 else if (e.getSource() == this.dateiSchließen){
+
                     listView.getItems().clear();
                     persons.clear();
                 }
@@ -191,6 +191,7 @@ public class App extends Application {
 
         persons.addAll(service.loadPersons(path1));
         listView.getItems().addAll(persons);
+
     }
 
     //Ausführung der Sortierung
