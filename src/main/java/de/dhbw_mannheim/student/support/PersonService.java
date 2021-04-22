@@ -198,9 +198,9 @@ public class PersonService {
         int separator = list.length / 2;
 
         //Die Linke Liste geht vom Index 0 bis separator - 1
-        Object[] left = Arrays.copyOfRange(list, 0, separator);
+        Object[] left = this.copyArray(list, 0, separator);
         //Die Rechte Liste geht von separator bis list.length - 1
-        Object[] right = Arrays.copyOfRange(list, separator, list.length);
+        Object[] right = this.copyArray(list, separator, list.length);
 
         //Führe mergeSort nochmal auf Unterlisten auf
         left = mergeSort(left, comparator);
@@ -263,5 +263,14 @@ public class PersonService {
 
         //Nun haben wir eine neue sortierte Liste
         return list;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T[] copyArray(T[] array, int start, int endExclusive) {
+        T[] copied = (T[]) new Object[endExclusive - start];
+
+        System.arraycopy(array, start, copied, 0, endExclusive - start);
+
+        return copied;
     }
 }

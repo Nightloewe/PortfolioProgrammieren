@@ -11,8 +11,8 @@ public class AppArrayList<T> implements List<T> {
     public static void main(String[] args) {
         AppArrayList<String> list = new AppArrayList<>();
 
-        list.add("Test");
         list.add("Test2");
+        list.add("Test");
         list.add("Test3");
 
         print(list);
@@ -154,6 +154,7 @@ public class AppArrayList<T> implements List<T> {
     @Override
     public void clear() {
         this.array = new Object[10];
+        this.count = 0;
     }
 
     @Override
