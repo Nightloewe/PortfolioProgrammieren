@@ -164,7 +164,7 @@ public class App extends Application {
     }
 
     public void sort() {
-        service.mergeSort(persons, active);
+        service.sort(persons, active);
     }
 
     public static void main(String[] args) {
