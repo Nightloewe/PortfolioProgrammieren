@@ -94,8 +94,8 @@ public class PersonService {
      * @param comparator der Vergleicher
      */
     @SuppressWarnings("unchecked")
-    public <T> void sort(List<T> collection, Comparator<T> comparator) {
-        Object[] result = this.mergeSort(collection.toArray(), (Comparator<Object>) comparator);
+    public <T> void mergeSort(List<T> collection, Comparator<T> comparator) {
+        Object[] result = this.sort(collection.toArray(), (Comparator<Object>) comparator);
 
         //Die Liste muss hier nur noch geupdatet werden mit den Ergebnissen aus dem Sortieralgorithmus
         for(int i = 0; i < collection.size(); i++) {
@@ -186,7 +186,7 @@ public class PersonService {
      * @param list die Liste
      * @param comparator der Vergleicher
      */
-    public Object[] mergeSort(Object[] list, Comparator<Object> comparator) {
+    public Object[] sort(Object[] list, Comparator<Object> comparator) {
         // Wenn die List nur ein Element hat, geben wir sie zurück
         if(list.length <= 1) {
             return list;
@@ -201,8 +201,8 @@ public class PersonService {
         Object[] right = this.copyArray(list, separator, list.length);
 
         //Führe mergeSort nochmal auf Unterlisten auf
-        left = mergeSort(left, comparator);
-        right = mergeSort(right, comparator);
+        left = sort(left, comparator);
+        right = sort(right, comparator);
 
         //Verbinde beide Listen
         return merge(left, right, comparator);
